@@ -6,7 +6,8 @@
   "dependencies": {
     "express.io": "x",
     "express-partials": "x",
-    "twitter": "x"
+    "twitter": "x",
+    "haml-coffee": "x"
   },
   "main": "server.coffee",
   "devDependencies": {},

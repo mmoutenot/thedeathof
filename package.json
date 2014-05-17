@@ -1,11 +1,26 @@
 {
-  "name": "hello-world",
-    "description": "hello world test app",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {
-      "express.io": "x",
-      "express-partials": "x",
-      "node-twitter": "x"
-    }
+  "name": "thedeathof",
+  "description": "hello world test app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express.io": "x",
+    "express-partials": "x",
+    "twitter": "x"
+  },
+  "main": "server.coffee",
+  "devDependencies": {},
+  "scripts": {
+    "test": "coffee server.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mmoutenot/thedeathof.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmoutenot/thedeathof/issues"
+  },
+  "homepage": "https://github.com/mmoutenot/thedeathof"
 }

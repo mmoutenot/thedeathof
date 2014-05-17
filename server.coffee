@@ -35,6 +35,7 @@ app.get '/', (req, res) ->
         text: data.text
         handle: "@#{data.user.screen_name }"
 
-server = app.listen 7076, ->
+appPort = process.env.PORT or 7076
+server = app.listen appPort, ->
   console.log 'Listening on port %d', server.address().port
 

@@ -12,7 +12,7 @@
   "main": "server.coffee",
   "devDependencies": {},
   "scripts": {
-    "test": "coffee server.coffee"
+    "start": "node_modules/.bin/coffee server.coffee"
   },
   "repository": {
     "type": "git",

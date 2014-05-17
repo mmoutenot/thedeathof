@@ -28,12 +28,13 @@ app.io.route 'ready', (req) ->
 app.get '/', (req, res) ->
   res.render 'index', name: 'Express user'
 
+  twit.stream 'filter', { track: 'greenlantern' }, (stream) ->
+    stream.on 'data', (data) ->
+      console.log 'emitting tweet event'
+      app.io.broadcast 'tweetEvent',
+        text: data.text
+        handle: "@#{data.user.screen_name }"
+
 server = app.listen 7076, ->
   console.log 'Listening on port %d', server.address().port
 
-twit.stream 'filter', { track: 'vinyl' }, (stream) ->
-  stream.on 'data', (data) ->
-    console.log 'emitting tweet event'
-    app.io.broadcast 'tweetEvent',
-      text: data.text
-      handle: "@#{data.user.screen_name }"

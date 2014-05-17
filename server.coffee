@@ -28,7 +28,7 @@ app.io.route 'ready', (req) ->
 app.get '/', (req, res) ->
   res.render 'index', name: 'Express user'
 
-  twit.stream 'filter', { track: 'greenlantern' }, (stream) ->
+  twit.stream 'filter', { track: 'vinyl' }, (stream) ->
     stream.on 'data', (data) ->
       console.log 'emitting tweet event'
       app.io.broadcast 'tweetEvent',

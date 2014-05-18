@@ -64,12 +64,12 @@ app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 
 app.get '/auth/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'),
   (req, res) ->
-    console.log "authenticated with twitter: #{ req.user }"
+    console.log "authenticated with twitter: #{ req.user.access_token_key }"
     twit = new twitter
       consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
       consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
-      access_token_key: '14211659-DsDjwozkhoVTAZwK7D4AjLFtZZ0vkFOZKjq2N13jB'
-      access_token_secret: 'VDyA0MNG11nLejSL2CELz01KsydrGFkN2dU2NGARGYeey'
+      access_token_key: req.user.access_token_key
+      access_token_secret: req.uwer.access_token_secret
 
     twit.stream 'filter', { track: 'vinyl' }, (stream) ->
       stream.on 'data', (data) ->

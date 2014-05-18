@@ -9,7 +9,7 @@
     "twitter": "x",
     "haml-coffee": "x",
     "passport": "x",
-    "passport-twitter: "x"
+    "passport-twitter": "x"
   },
   "main": "server.coffee",
   "devDependencies": {},

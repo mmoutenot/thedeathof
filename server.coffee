@@ -41,7 +41,7 @@ passport.use new TwitterStrategy(
     # represent the logged-in user.  In a typical application, you would want
     # to associate the Twitter account with a user record in your database,
     # and return that user instead.
-    done null, token, tokenSecret
+    done null, access_token_key: token, access_token_secret: tokenSecret
 )
 
 app.use passport.initialize()
@@ -60,26 +60,23 @@ app.io.route 'ready', (req) ->
 app.get '/', (req, res) ->
   res.render 'index', name: 'Express user'
 
+  twit.stream 'filter', { track: 'vinyl' }, (stream) ->
+    stream.on 'data', (data) ->
+      console.log 'emitting tweet event'
+      app.io.broadcast 'tweetEvent',
+        text: data.text
+        handle: "@#{ data.user.screen_name }"
+
 app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 
 app.get '/auth/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'),
   (req, res) ->
-
-    console.log 'authenticated with twitter'
-
+    console.log "authenticated with twitter: #{ req.user }"
     twit = new twitter
       consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
       consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
       access_token_key: '14211659-DsDjwozkhoVTAZwK7D4AjLFtZZ0vkFOZKjq2N13jB'
       access_token_secret: 'VDyA0MNG11nLejSL2CELz01KsydrGFkN2dU2NGARGYeey'
-
-    twit.stream 'filter', { track: 'vinyl' }, (stream) ->
-      stream.on 'data', (data) ->
-        console.log 'emitting tweet event'
-        app.io.broadcast 'tweetEvent',
-          text: data.text
-          handle: "@#{data.user.screen_name }"
-
     res.redirect '/'
 
 appPort = process.env.PORT or 7076

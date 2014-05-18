@@ -69,7 +69,7 @@ app.get '/auth/twitter/callback', passport.authenticate('twitter', failureRedire
       consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
       consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
       access_token_key: req.user.access_token_key
-      access_token_secret: req.uwer.access_token_secret
+      access_token_secret: req.user.access_token_secret
 
     twit.stream 'filter', { track: 'vinyl' }, (stream) ->
       stream.on 'data', (data) ->

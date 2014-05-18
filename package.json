@@ -7,7 +7,9 @@
     "express.io": "x",
     "express-partials": "x",
     "twitter": "x",
-    "haml-coffee": "x"
+    "haml-coffee": "x",
+    "passport": "x",
+    "passport-twitter: "x"
   },
   "main": "server.coffee",
   "devDependencies": {},

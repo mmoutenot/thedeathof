@@ -14,7 +14,7 @@
     .header
       %h1 The death of #{ @topic }
       -if @showLogInMessage
-        %p In order to prevent twitter from getting mad at me due to traffic, you have to log in to monitor a new topic.
+        %p.error In order to prevent twitter from getting mad at me due to traffic, you have to log in to monitor a new topic.
       %p.tweet
     %canvas{ :id => "ekg" }
 

@@ -36,6 +36,15 @@ canvas {
   padding-left: 90px
 }
 
+.error {
+  color: white;
+  float: left;
+  width: 80%;
+  text-overflow:ellipsis;
+  font-family: 'Bebas';
+  color: yellow;
+}
+
 h1 {
   color: white;
   font-size: 6em;

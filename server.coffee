@@ -22,8 +22,13 @@ app.configure ->
 
 app.use express.static __dirname + '/assets'
 
+@streams = {}
+DEFAULT_STREAM_TOPIC = 'vinyl'
 
 ###### TWITTER AND AUTH
+
+MARSH_USER_ACCESS_TOKEN_KEY = '14211659-DsDjwozkhoVTAZwK7D4AjLFtZZ0vkFOZKjq2N13jB'
+MARSH_USER_ACCESS_TOKEN_SECRET = 'VDyA0MNG11nLejSL2CELz01KsydrGFkN2dU2NGARGYeey'
 
 passport = require 'passport'
 TwitterStrategy = require('passport-twitter').Strategy
@@ -59,29 +64,44 @@ app.io.route 'ready', (req) ->
 
 app.get '/', (req, res) ->
   res.render 'index', name: 'Express user'
+  if not req.user or not req.query.topic
+    createDefaultSubscription()
+  else
+    createSubscription req.query.topic
 
 app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 
 app.get '/auth/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'),
   (req, res) ->
     console.log "authenticated with twitter: #{ req.user.access_token_key }"
-    twit = new twitter
-      consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
-      consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
-      access_token_key: req.user.access_token_key
-      access_token_secret: req.user.access_token_secret
-
-    twit.stream 'filter', { track: 'vinyl' }, (stream) ->
-      stream.on 'data', (data) ->
-        console.log 'emitting tweet event'
-        app.io.broadcast 'tweetEvent',
-          text: data.text
-          handle: "@#{ data.user.screen_name }"
-
     res.redirect '/'
 
 appPort = process.env.PORT or 7076
 server = app.listen appPort, ->
   console.log 'Listening on port %d', server.address().port
 
+###### HELPERS
 
+createDefaultSubscription = ->
+  createSubscription DEFAULT_STREAM_TOPIC, MARSH_USER_ACCESS_TOKEN_KEY, MARSH_USER_ACCESS_TOKEN_SECRET
+
+createSubscription = (topic, accessTokenKey, accessTokenSecret) ->
+  twit = new twitter
+    consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
+    consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
+    access_token_key: accessTokenKey
+    access_token_secret: accessTokenSecret
+
+  unless @streams[topic]
+    twit.stream 'filter', { track: topic }, (stream) ->
+      @streams[topic] = stream
+
+      stream.on 'data', (data) ->
+        console.log 'emitting tweet event'
+        app.io.broadcast 'tweetEvent',
+          text: data.text
+          handle: "@#{ data.user.screen_name }"
+
+destroyStreams = ->
+  for topic, stream of @streams
+    stream.destroy()

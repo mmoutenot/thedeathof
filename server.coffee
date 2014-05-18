@@ -64,7 +64,7 @@ app.io.route 'ready', (req) ->
 
 app.get '/', (req, res) ->
   topic = req.query.topic || DEFAULT_STREAM_TOPIC
-  streamExists = stream[topic]?
+  streamExists = streams[topic]?
   if req.user
     accessTokenKey = req.user.accessTokenKey || MARSH_USER_ACCESS_TOKEN_KEY
     accessTokenSecret = req.user.accessTokenSecret || MARSH_USER_ACCESS_TOKEN_SECRET

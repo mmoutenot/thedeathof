@@ -22,7 +22,7 @@ app.configure ->
 
 app.use express.static __dirname + '/assets'
 
-@streams = {}
+streams = {}
 DEFAULT_STREAM_TOPIC = 'vinyl'
 
 ###### TWITTER AND AUTH
@@ -92,9 +92,9 @@ createSubscription = (topic, accessTokenKey, accessTokenSecret) ->
     access_token_key: accessTokenKey
     access_token_secret: accessTokenSecret
 
-  unless @streams[topic]
+  unless streams["#{ topic }"]
     twit.stream 'filter', { track: topic }, (stream) ->
-      @streams[topic] = stream
+      streams[topic] = stream
 
       stream.on 'data', (data) ->
         console.log 'emitting tweet event'
@@ -103,5 +103,5 @@ createSubscription = (topic, accessTokenKey, accessTokenSecret) ->
           handle: "@#{ data.user.screen_name }"
 
 destroyStreams = ->
-  for topic, stream of @streams
+  for topic, stream of streams
     stream.destroy()

@@ -64,13 +64,21 @@ app.io.route 'ready', (req) ->
 
 app.get '/', (req, res) ->
   topic = req.query.topic || DEFAULT_STREAM_TOPIC
-  accessTokenKey = req.user?.accessTokenKey || MARSH_USER_ACCESS_TOKEN_KEY
-  accessTokenSecret = req.user?.accessTokenSecret || MARSH_USER_ACCESS_TOKEN_SECRET
+  streamExists = stream[topic]?
+  if req.user
+    accessTokenKey = req.user.accessTokenKey || MARSH_USER_ACCESS_TOKEN_KEY
+    accessTokenSecret = req.user.accessTokenSecret || MARSH_USER_ACCESS_TOKEN_SECRET
+  else
+    topic = DEFAULT_STREAM_TOPIC if !streamExists
+    accessTokenKey = MARSH_USER_ACCESS_TOKEN_KEY
+    accessTokenSecret = MARSH_USER_ACCESS_TOKEN_SECRET
 
   createSubscription topic, accessTokenKey, accessTokenSecret
+
   res.render 'index',
     topic: topic
     authed: req.user?
+    showLogInMessage: !req.user and !streamExists
 
 app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 

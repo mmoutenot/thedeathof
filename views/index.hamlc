@@ -8,7 +8,7 @@
     :javascript
       var topic = "#{ @topic }";
   %body
-    if !@authed
+    - if !@authed
       %a.button#twitter-sign-in{ :href => '/auth/twitter' }
 
     .header

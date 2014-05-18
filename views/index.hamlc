@@ -8,7 +8,8 @@
     :javascript
       var topic = "#{ @topic }";
   %body
-    %a.button#twitter-sign-in{ :href => '/auth/twitter' }
+    if !@authed
+      %a.button#twitter-sign-in{ :href => '/auth/twitter' }
 
     .header
       %h1 The death of #{ @topic }

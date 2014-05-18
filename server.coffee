@@ -68,7 +68,9 @@ app.get '/', (req, res) ->
   accessTokenSecret = req.user?.accessTokenSecret || MARSH_USER_ACCESS_TOKEN_SECRET
 
   createSubscription topic, accessTokenKey, accessTokenSecret
-  res.render 'index', topic: topic
+  res.render 'index',
+    topic: topic
+    authed: req.user?
 
 app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 

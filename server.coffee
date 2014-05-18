@@ -63,17 +63,18 @@ app.io.route 'ready', (req) ->
     status: 'connected'
 
 app.get '/', (req, res) ->
-  res.render 'index', name: 'Express user'
-  if not req.user or not req.query.topic
-    createDefaultSubscription()
-  else
-    createSubscription req.query.topic
+  topic = req.query.topic || DEFAULT_STREAM_TOPIC
+  accessTokenKey = req.user?.accessTokenKey || MARSH_USER_ACCESS_TOKEN_KEY
+  accessTokenSecret = req.user?.accessTokenSecret || MARSH_USER_ACCESS_TOKEN_SECRET
+
+  createSubscription topic, accessTokenKey, accessTokenSecret
+  res.render 'index', topic: topic
 
 app.get '/auth/twitter', passport.authenticate('twitter'), (req, res) ->
 
 app.get '/auth/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'),
   (req, res) ->
-    console.log "authenticated with twitter: #{ req.user.access_token_key }"
+    console.log "authenticated with twitter: #{ req.user?.access_token_key }"
     res.redirect '/'
 
 appPort = process.env.PORT or 7076
@@ -82,10 +83,9 @@ server = app.listen appPort, ->
 
 ###### HELPERS
 
-createDefaultSubscription = ->
-  createSubscription DEFAULT_STREAM_TOPIC, MARSH_USER_ACCESS_TOKEN_KEY, MARSH_USER_ACCESS_TOKEN_SECRET
-
 createSubscription = (topic, accessTokenKey, accessTokenSecret) ->
+  console.log "Creating stream for topic: #{ topic }"
+
   twit = new twitter
     consumer_key: 'IgFAJBcKpEEk17VlJbuWLn7TE'
     consumer_secret: 'Yo6jJdqO0W53tKv6rT808lHXdqbbVgtXOwz4mUWX5HgWw7rsrN'
@@ -97,10 +97,10 @@ createSubscription = (topic, accessTokenKey, accessTokenSecret) ->
       streams[topic] = stream
 
       stream.on 'data', (data) ->
-        console.log 'emitting tweet event'
-        app.io.broadcast 'tweetEvent',
+        console.log "emitting tweet event for #{ topic }"
+        app.io.broadcast "tweetEvent:#{ topic }",
           text: data.text
-          handle: "@#{ data.user.screen_name }"
+          handle: "@#{ data.user?.screen_name }"
 
 destroyStreams = ->
   for topic, stream of streams

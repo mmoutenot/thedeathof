@@ -20,6 +20,16 @@ canvas {
   background:#000;
 }
 
+#twitter-sign-in {
+  height: 28px;
+  width: 158px;
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  background-image: url('/images/sign-in-with-twitter-gray.png');
+  background-color: black;
+}
+
 .header {
   position: absolute;
   width: 600px;

@@ -34,7 +34,7 @@ $(document).ready ->
   ctx.strokeStyle = '#fff'
   ctx.lineWidth = 2
 
-  socket.on 'tweetEvent', (data) ->
+  socket.on "tweetEvent:#{ topic }", (data) ->
     console.log data.text + ' - ' + data.handle
     $('.tweet').text "#{ data.text } - #{ data.handle }"
     if not blipping

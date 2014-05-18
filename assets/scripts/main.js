@@ -31,7 +31,7 @@
     scanBarWidth = 20;
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
-    socket.on('tweetEvent', function(data) {
+    socket.on("tweetEvent:" + topic, function(data) {
       console.log(data.text + ' - ' + data.handle);
       $('.tweet').text("" + data.text + " - " + data.handle);
       if (!blipping) {

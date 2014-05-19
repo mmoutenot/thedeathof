@@ -55,10 +55,10 @@
       }
       py += dy;
       dy -= ddy;
-      if (py === start_y && ddy !== 0 && blipping && !switched) {
+      if (py > start_y && ddy !== 0 && blipping && !switched) {
         ddy = -ddy;
         switched = true;
-      } else if (py === start_y && ddy !== 0 && switched) {
+      } else if (py < start_y && ddy !== 0 && switched) {
         ddy = 0;
         dy = 0;
         switched = false;

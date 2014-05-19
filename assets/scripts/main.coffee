@@ -61,10 +61,10 @@ $(document).ready ->
     py += dy
     dy -= ddy
 
-    if py is start_y and ddy isnt 0 and blipping and not switched
+    if py > start_y and ddy isnt 0 and blipping and not switched
       ddy = -ddy
       switched = true
-    else if py is start_y and ddy isnt 0 and switched
+    else if py < start_y and ddy isnt 0 and switched
       ddy = 0
       dy = 0
       switched = false
